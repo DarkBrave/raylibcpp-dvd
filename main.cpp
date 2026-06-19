@@ -80,8 +80,8 @@ public:
         velocityY = vY;
         sizeX = sX;
         sizeY = sY;
-        posX = (std::rand()/(RAND_MAX + 1.0f)) * (DvdWindow::window_width-sizeX);
-        posY = (std::rand()/(RAND_MAX + 1.0f)) * (DvdWindow::window_height-sizeY);
+        posX = GetRandomValue(DvdWindow::window_width, sizeX);
+        posY = GetRandomValue(DvdWindow::window_height, sizeY);
         currentHue = 0;
         color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
     }
