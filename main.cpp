@@ -141,7 +141,7 @@ int main() {
         if (IsKeyPressed(KEY_A)) {
             dvds.emplace_back(
                 GetRandomValue(-1000, 1000),
-                GetRandomValue(800, 800),
+                GetRandomValue(-800, 800),
                 150,
                 80
             );
@@ -158,7 +158,7 @@ int main() {
             dvd.processPhysics();
             dvd.draw();
         }
-        if (DvdWindow::showDebug == true)
+        if (DvdWindow::showDebug)
             DrawText(TextFormat("DVDs: %d, %dfps", dvds.size(), GetFPS()),20,10,20,WHITE);
         if (spamDvd)
             dvds.emplace_back(
