@@ -5,15 +5,19 @@ class DvdWindow {
 public:
     static inline int window_width = 0;
     static inline int window_height = 0;
-    
+
     static void init(const int w, const int h)  {
         window_width = w;
         window_height = h;
+        SetConfigFlags(FLAG_WINDOW_RESIZABLE);
         InitWindow(window_width, window_height, "DVD");
     }
-
     static float getFrameTime() {
         return GetFrameTime();
+    }
+    static void update() {
+        window_width = GetScreenWidth();
+        window_height = GetScreenHeight();
     }
 };
 
@@ -127,6 +131,7 @@ int main() {
     dvds.emplace_back(600,300,150,80);
 
     while (!WindowShouldClose()) {
+        DvdWindow::update();
         DvdAudio::update();
         BeginDrawing();
         ClearBackground(BLACK);
