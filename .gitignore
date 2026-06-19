@@ -72,3 +72,6 @@ Testing/
 
 cmake-build-debug/
 cmake-build-release/
+
+.DS_Store
+**/.DS_Store
