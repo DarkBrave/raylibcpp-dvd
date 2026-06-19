@@ -140,8 +140,8 @@ int main() {
         ClearBackground(BLACK);
         if (IsKeyPressed(KEY_A)) {
             dvds.emplace_back(
-                GetRandomValue(0, 1000),
-                GetRandomValue(0, 800),
+                GetRandomValue(-1000, 1000),
+                GetRandomValue(800, 800),
                 150,
                 80
             );
@@ -162,8 +162,8 @@ int main() {
             DrawText(TextFormat("DVDs: %d, %dfps", dvds.size(), GetFPS()),20,10,20,WHITE);
         if (spamDvd)
             dvds.emplace_back(
-                GetRandomValue(0, 1000),
-                GetRandomValue(0, 800),
+                GetRandomValue(-1000, 1000),
+                GetRandomValue(-800, 800),
                 150,
                 80
             );
