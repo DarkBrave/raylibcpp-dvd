@@ -1,3 +1,5 @@
+#include <iostream>
+#include <ostream>
 #include <raylib.h>
 #include <vector>
 
@@ -76,10 +78,10 @@ public:
     DvdLogo(float vX, float vY, float sX, float sY) {
         velocityX = vX;
         velocityY = vY;
-        posX = static_cast<float>(DvdWindow::window_width)/2;
-        posY = static_cast<float>(DvdWindow::window_height)/2;
         sizeX = sX;
         sizeY = sY;
+        posX = (std::rand()/(RAND_MAX + 1.0f)) * (DvdWindow::window_width-sizeX);
+        posY = (std::rand()/(RAND_MAX + 1.0f)) * (DvdWindow::window_height-sizeY);
         currentHue = 0;
         color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
     }
