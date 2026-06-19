@@ -5,6 +5,7 @@ class DvdWindow {
 public:
     static inline int window_width = 0;
     static inline int window_height = 0;
+    
     static void init(const int w, const int h)  {
         window_width = w;
         window_height = h;
@@ -76,7 +77,7 @@ public:
         sizeX = sX;
         sizeY = sY;
         currentHue = 0;
-        color = ColorFromHSV(static_cast<float>(currentHue), 100, 100);
+        color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
     }
 
     void processPhysics() {
