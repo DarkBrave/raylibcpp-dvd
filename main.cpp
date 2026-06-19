@@ -1,5 +1,4 @@
 #include <iostream>
-#include <ostream>
 #include <raylib.h>
 #include <vector>
 
@@ -7,6 +6,7 @@ class DvdWindow {
 public:
     static inline int window_width = 0;
     static inline int window_height = 0;
+    static inline bool showDebug = false;
 
     static void init(const int w, const int h)  {
         window_width = w;
@@ -80,8 +80,8 @@ public:
         velocityY = vY;
         sizeX = sX;
         sizeY = sY;
-        posX = GetRandomValue(DvdWindow::window_width, sizeX);
-        posY = GetRandomValue(DvdWindow::window_height, sizeY);
+        posX = GetRandomValue(0, DvdWindow::window_width-sizeX);
+        posY = GetRandomValue(0, DvdWindow::window_height-sizeY);
         currentHue = 0;
         color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
     }
@@ -145,10 +145,15 @@ int main() {
                 80
             );
         }
+        if (IsKeyPressed(KEY_B)) {
+            DvdWindow::showDebug = !DvdWindow::showDebug;
+        }
         for (DvdLogo& dvd : dvds) {
             dvd.processPhysics();
             dvd.draw();
         }
+        if (DvdWindow::showDebug == true)
+            DrawText(TextFormat("DVDs: %d, %dfps", dvds.size(), GetFPS()),20,10,20,WHITE);
         EndDrawing();
     }
     DvdAudio::end();
