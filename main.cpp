@@ -126,6 +126,7 @@ Texture2D DvdLogo::dvdSprite;
 Rectangle DvdLogo::dvdSource;
 
 int main() {
+    bool spamDvd{false};
     DvdWindow::init(900, 600);
     DvdAudio::init();
     DvdLogo::init();
@@ -145,8 +146,13 @@ int main() {
                 80
             );
         }
-        if (IsKeyPressed(KEY_B)) {
+        if (IsKeyPressed(KEY_B))
             DvdWindow::showDebug = !DvdWindow::showDebug;
+        if (IsKeyPressed(KEY_S))
+            spamDvd = !spamDvd;
+        if (IsKeyPressed(KEY_C)) {
+            dvds.clear();
+            dvds.shrink_to_fit();
         }
         for (DvdLogo& dvd : dvds) {
             dvd.processPhysics();
@@ -154,6 +160,13 @@ int main() {
         }
         if (DvdWindow::showDebug == true)
             DrawText(TextFormat("DVDs: %d, %dfps", dvds.size(), GetFPS()),20,10,20,WHITE);
+        if (spamDvd)
+            dvds.emplace_back(
+                GetRandomValue(0, 1000),
+                GetRandomValue(0, 800),
+                150,
+                80
+            );
         EndDrawing();
     }
     DvdAudio::end();
