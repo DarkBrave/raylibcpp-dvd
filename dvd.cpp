@@ -1,6 +1,14 @@
 #include <iostream>
 #include <raylib.h>
 
+class IBehavior {
+public:
+    std::string name;
+    virtual void onStart() {}
+    virtual void onUpdate() {}
+    virtual void onRender() {}
+    virtual ~IBehavior() = default;
+};
 
 class App {
 private:
@@ -42,7 +50,10 @@ private:
         int window_height;
         float frame_time{};
 
-        Window(int w, int h) : window_width(w), window_height(h) {}
+        Window(const int w, const int h, const std::string& initName) : window_width(w), window_height(h) {
+            InitWindow(window_width, window_height, initName.c_str());
+            SetTargetFPS(60);
+        }
 
         void update() {
             window_width = GetScreenWidth();
@@ -77,8 +88,48 @@ private:
             sounds.emplace(name, LoadSound(path.c_str()));
         };
     };
+    IBehavior* behavior;
     Assets assets;
     AudioManager audioManager;
     Window window;
 public:
+    App(IBehavior* initBehavior, const int initW, const int initH) :
+        assets(),
+        audioManager(assets.musics, assets.sounds),
+        window(initW, initH, behavior->name),
+        behavior(initBehavior)
+    {
+        behavior->onStart();
+    }
+    void run() {
+        while (!WindowShouldClose()) {
+            window.update();
+            audioManager.update();
+            behavior->onUpdate();
+
+            BeginDrawing();
+            ClearBackground(BLACK);
+            behavior->onRender();
+            EndDrawing();
+        }
+    }
 };
+
+class MyBehavior : public IBehavior {
+public:
+    std::string name = "Test";
+    void onStart() override {
+        std::cout << "Started\n";
+    }
+    void onUpdate() override {
+    }
+    void onRender() override {
+    }
+};
+
+int main() {
+    MyBehavior behavior;
+    App app(&behavior, 100,100);
+    app.run();
+    return 0;
+}
