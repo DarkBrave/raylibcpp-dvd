@@ -6,32 +6,33 @@ class App {
 private:
     class AudioManager {
     private:
-        Music* currentMusic = nullptr;
-        std::unordered_map<std::string, Music*>* musics;
-        std::unordered_map<std::string, Sound*>* sounds;
+        std::string currentMusic;
+        std::unordered_map<std::string, Music>& musics;
+        std::unordered_map<std::string, Sound>& sounds;
     public:
-        AudioManager(std::unordered_map<std::string, Music*>* musicAssets, std::unordered_map<std::string, Sound*>* soundsAssets) {
+        AudioManager(std::unordered_map<std::string, Music>& musicAssets, std::unordered_map<std::string, Sound>& soundsAssets) :
+        musics(musicAssets),
+        sounds(soundsAssets)
+        {
             InitAudioDevice();
-            musics = musicAssets;
-            sounds = soundsAssets;
+
         }
         ~AudioManager() {
             CloseAudioDevice();
         }
         void update() const {
-            if (currentMusic != nullptr)
-                UpdateMusicStream(*currentMusic);
+            if (!currentMusic.empty())
+                UpdateMusicStream(musics.find(currentMusic)->second);
         }
         void playMusic(const std::string& music) {
-            if (currentMusic != nullptr) {
-                StopMusicStream(*currentMusic);
-            }
-            currentMusic = musics->find(music)->second;
-            PlayMusicStream(*currentMusic);
+            if (!currentMusic.empty())
+                StopMusicStream(musics.find(currentMusic)->second);
+            currentMusic = music;
+            PlayMusicStream(musics.find(music)->second);
         }
         void playSound(const std::string& sound) const {
-            const Sound* soundToPlay = sounds->find(sound)->second;
-            PlaySound(*soundToPlay);
+            const Sound& soundToPlay = sounds.find(sound)->second;
+            PlaySound(soundToPlay);
         }
     };
 
@@ -76,4 +77,8 @@ private:
             sounds.emplace(name, LoadSound(path.c_str()));
         };
     };
+    Assets assets;
+    AudioManager audioManager;
+    Window window;
+public:
 };

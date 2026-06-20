@@ -49,13 +49,17 @@ private:
             currentHue += hueJump;
         }
         color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
+        PlaySound(dvdSound);
     }
 public:
     static Texture2D dvdSprite;
     static Rectangle dvdSource;
+    static Sound dvdSound;
 
     static void init() {
         dvdSprite = LoadTexture("assets/dvd.png");
+        dvdSound = LoadSound("assets/sounds/bounce.ogg");
+        SetSoundVolume(dvdSound, 0.1);
         dvdSource = {
             0.0f,
             0.0f,
@@ -128,6 +132,7 @@ public:
 };
 Texture2D DvdLogo::dvdSprite;
 Rectangle DvdLogo::dvdSource;
+Sound DvdLogo::dvdSound;
 
 int main() {
     bool spamDvd{false};
