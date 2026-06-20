@@ -18,7 +18,7 @@ private:
         ~AudioManager() {
             CloseAudioDevice();
         }
-        void update() {
+        void update() const {
             if (currentMusic != nullptr)
                 UpdateMusicStream(*currentMusic);
         }
@@ -29,7 +29,7 @@ private:
             currentMusic = musics->find(music)->second;
             PlayMusicStream(*currentMusic);
         }
-        void playSound(const std::string& sound) {
+        void playSound(const std::string& sound) const {
             const Sound* soundToPlay = sounds->find(sound)->second;
             PlaySound(*soundToPlay);
         }
@@ -39,7 +39,7 @@ private:
     public:
         int window_width;
         int window_height;
-        float frame_time;
+        float frame_time{};
 
         Window(int w, int h) : window_width(w), window_height(h) {}
 
@@ -60,8 +60,7 @@ private:
         std::unordered_map<std::string, Texture2D> textures;
         std::unordered_map<std::string, Music> musics;
         std::unordered_map<std::string, Sound> sounds;
-        Assets() {
-        }
+        Assets() = default;
         ~Assets() {
             unloadAssets(textures, UnloadTexture);
             unloadAssets(musics, UnloadMusicStream);
