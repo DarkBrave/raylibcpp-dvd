@@ -1,11 +1,14 @@
 #include <iostream>
 #include <raylib.h>
+#include <string>
+#include <unordered_map>
 
 
 namespace andray {
     class IBehavior {
     public:
         std::string name;
+        int initW{}, initH{};
         virtual void onStart() {}
         virtual void onUpdate() {}
         virtual void onRender() {}
@@ -53,7 +56,7 @@ namespace andray {
             float frame_time{};
 
             Window(const int w, const int h, const std::string& initName) : window_width(w), window_height(h) {
-                InitWindow(window_width, window_height, initName.c_str());
+                InitWindow(window_width, window_height, "hi");
                 SetTargetFPS(60);
             }
 
@@ -95,11 +98,11 @@ namespace andray {
         AudioManager audioManager;
         Window window;
     public:
-        App(IBehavior* initBehavior, const int initW, const int initH) :
+        App(IBehavior* initBehavior) :
             assets(),
             audioManager(assets.musics, assets.sounds),
             behavior(initBehavior),
-            window(initW, initH, behavior->name)
+            window(behavior->initW, behavior->initH, behavior->name)
         {
             behavior->onStart();
         }

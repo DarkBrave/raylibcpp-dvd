@@ -4,9 +4,10 @@ project(CPPDVD LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(CPPDVD old.cpp
+add_executable(CPPDVD
         andray.cpp
         andray.h
+        dvd.cpp
 )
 
 include(FetchContent)
