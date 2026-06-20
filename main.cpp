@@ -4,8 +4,8 @@
 
 class DvdWindow {
 public:
-    static inline int window_width = 0;
-    static inline int window_height = 0;
+    static inline int window_width{0};
+    static inline int window_height{0};
     static inline bool showDebug = false;
 
     static void init(const int w, const int h)  {
@@ -64,24 +64,28 @@ public:
         };
     }
 
-    float velocityX;
-    float velocityY;
-    float posX;
-    float posY;
-    float sizeX;
-    float sizeY;
+    float velocityX{};
+    float velocityY{};
+    float posX{};
+    float posY{};
+    float sizeX{};
+    float sizeY{};
 
-    int hueJump = 30;
-    Color color;
+    int hueJump = {30};
+    Color color{};
     int currentHue;
 
-    DvdLogo(float vX, float vY, float sX, float sY) {
-        velocityX = vX;
-        velocityY = vY;
-        sizeX = sX;
-        sizeY = sY;
-        posX = GetRandomValue(0, DvdWindow::window_width-sizeX);
-        posY = GetRandomValue(0, DvdWindow::window_height-sizeY);
+    DvdLogo(float vX, float vY, float sX, float sY) :
+        velocityX(vX),
+        velocityY(vY),
+        sizeX(sX),
+        sizeY(sY)
+    {
+        auto generateRandomPosition = [](int max) -> float {
+            return static_cast<float>(GetRandomValue(0, max));
+        };
+        posX = generateRandomPosition(DvdWindow::window_width - sizeX);
+        posY = generateRandomPosition(DvdWindow::window_height - sizeY);
         currentHue = 0;
         color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
     }
