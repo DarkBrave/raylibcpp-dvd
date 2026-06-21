@@ -1,28 +1,36 @@
-#include <iostream>
-#include <ostream>
-
 #include "andray.h"
+#include <raylib.h>
 
 class DvdObject : public andray::IObject {
 public:
-
-    DvdObject() :
-        IObject("dvd", 200, 200) {
+    float velocityX{}, velocityY{};
+    float sizeX{}, sizeY{};
+    DvdObject(const float vX, const float vY, const float sX, const float sY) :
+        IObject("dvd", 200, 200),
+        velocityX(vX), velocityY(vY), sizeX(sX), sizeY(sY)
+    {}
+    void onStart() override {
+        app->loadTexture("dvd", "assets/textures/dvd.png");
+        auto generateRandomPosition = [](int max) -> float {
+            return static_cast<float>(GetRandomValue(0, max));
+        };
+        x = generateRandomPosition(app->getWindowWidth() - sizeX);
+        y = generateRandomPosition(app->getWindowHeight() - sizeY);
     }
-    void draw() override {
-        DrawTexture(*texture, x, y , WHITE);
+    void onRender() override {
+        DrawTexture(texture->get(), x, y , WHITE);
     }
 };
 
 class DvdBehavior : public andray::IBehavior {
 public:
-    void onStart() {
+    void onStart() override {
         app->loadTexture("dvd", "assets/textures/dvd.png");
-        app->addObject(new DvdObject());
+        app->addObject(new DvdObject(10,10,10,10));
     }
-    void onUpdate() {
+    void onUpdate() override {
     }
-    void onRender() {
+    void onRender() override {
     }
     DvdBehavior() {
         name = "DvdBehavior";

@@ -7,28 +7,30 @@
 namespace andray {
     class App;
 
-    class IBehavior {
+    class ILifecycle {
     public:
-        std::string name;
-        int initW{}, initH{};
         App* app = nullptr;
-
         virtual void onStart() {}
         virtual void onUpdate() {}
         virtual void onRender() {}
     };
 
-    class IObject {
+    class IBehavior : public ILifecycle {
+    public:
+        std::string name;
+        int initW{}, initH{};
+    };
+
+    class IObject : public ILifecycle {
     public:
         int x{}, y{};
         std::string textureName;
-        Texture2D* texture;
+        std::optional<std::reference_wrapper<Texture2D>> texture;
         IObject(const std::string& textureName, const int& x, const int& y) :
             x(x), y(y),
             textureName(textureName)
         {}
         ~IObject() = default;
-        virtual void draw() = 0;
     };
 
     class App {
@@ -120,12 +122,13 @@ namespace andray {
                         std::cout << "Missing texture: " << object->textureName << "\n";
                         continue;
                     }
-                    object->texture = &workingTexture->second;
-                    object->draw();
+                    object->texture = workingTexture->second;
+                    object->onRender();
                 }
             }
             void addObject(IObject* object) {
                 objects.push_back(object);
+                object->onStart();
             }
         };
         IBehavior* behavior;
@@ -143,6 +146,19 @@ namespace andray {
         {
             behavior->app = this;
         }
+        void loadTexture(const std::string& name, const std::string& path) {
+            assets.loadTexture(name, path);
+        };
+        void addObject(IObject* object) {
+            object->app = this;
+            objectManager.addObject(object);
+        }
+        int getWindowWidth() {
+            return window.window_width;
+        }
+        int getWindowHeight() {
+            return window.window_height;
+        }
         void run() {
             behavior->onStart();
             while (!WindowShouldClose()) {
@@ -156,12 +172,6 @@ namespace andray {
                 objectManager.drawObjects(assets);
                 EndDrawing();
             }
-        }
-        void loadTexture(const std::string& name, const std::string& path) {
-            assets.loadTexture(name, path);
-        };
-        void addObject(IObject* object) {
-            objectManager.addObject(object);
         }
     };
 }
