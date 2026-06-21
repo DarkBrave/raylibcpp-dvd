@@ -3,15 +3,23 @@
 
 #include "andray.h"
 
+class DvdObject : public andray::IObject {
+public:
+    int x{200}, y{200};
+    std::string textureName{"dvd"};
+};
+
 class DvdBehavior : public andray::IBehavior {
+public:
     void onStart() {
         std::cout << "onStart" << std::endl;
+        app->loadTexture("dvd", "assets/textures/dvd.png");
+        app->addObject(new DvdObject());
     }
     void onUpdate() {
     }
     void onRender() {
     }
-public:
     DvdBehavior() {
         name = "DvdBehavior";
         initW = 800;

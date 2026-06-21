@@ -5,14 +5,24 @@
 
 
 namespace andray {
+    class App;
+
     class IBehavior {
     public:
         std::string name;
         int initW{}, initH{};
+        App* app = nullptr;
+
         virtual void onStart() {}
         virtual void onUpdate() {}
         virtual void onRender() {}
-        virtual ~IBehavior() = default;
+    };
+
+    class IObject {
+    public:
+        int x{}, y{};
+        std::string textureName;
+        Texture2D* texture;
     };
 
     class App {
@@ -93,20 +103,36 @@ namespace andray {
                 sounds.emplace(name, LoadSound(path.c_str()));
             };
         };
+        class ObjectManager {
+        private:
+        public:
+            std::vector<IObject> objects;
+            void drawObjects(Assets& workingAssets) {
+                for (auto& object : objects) {
+                    object.texture = &workingAssets.textures[object.textureName];
+                }
+            }
+            void addObject(IObject& object) {
+                objects.emplace_back(object);
+            }
+        };
         IBehavior* behavior;
         Assets assets;
         AudioManager audioManager;
         Window window;
+        ObjectManager objectManager;
     public:
         App(IBehavior* initBehavior) :
             assets(),
+            objectManager(),
             audioManager(assets.musics, assets.sounds),
             behavior(initBehavior),
             window(behavior->initW, behavior->initH, behavior->name)
         {
-            behavior->onStart();
+            behavior->app = this;
         }
         void run() {
+            behavior->onStart();
             while (!WindowShouldClose()) {
                 window.update();
                 audioManager.update();
@@ -115,8 +141,15 @@ namespace andray {
                 BeginDrawing();
                 ClearBackground(BLACK);
                 behavior->onRender();
+                objectManager.drawObjects(assets);
                 EndDrawing();
             }
+        }
+        void loadTexture(const std::string& name, const std::string& path) {
+            assets.loadTexture(name, path);
+        };
+        void addObject(IObject& object) {
+            objectManager.addObject(object);
         }
     };
 }
