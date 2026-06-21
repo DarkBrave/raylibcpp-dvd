@@ -60,9 +60,9 @@ public:
     }
     void onRender() override {
         Rectangle dvdSource = {0.0f,0.0f,
-            static_cast<float>(texture->get().width), static_cast<float>(texture->get().height)};
+            static_cast<float>(texture->width), static_cast<float>(texture->height)};
         Rectangle dvdLogo = {static_cast<float>(x), static_cast<float>(y), sizeX, sizeY};
-        DrawTexturePro(texture->get(), dvdSource, dvdLogo, (Vector2){0.0f, 0.0f}, 0.0f, color);
+        DrawTexturePro(*texture, dvdSource, dvdLogo, (Vector2){0.0f, 0.0f}, 0.0f, color);
     }
 };
 

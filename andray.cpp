@@ -25,7 +25,7 @@ namespace andray {
     public:
         int x{}, y{};
         std::string textureName;
-        std::optional<std::reference_wrapper<Texture2D>> texture;
+        Texture2D* texture;
         IObject(const std::string& textureName, const int& x, const int& y) :
             x(x), y(y),
             textureName(textureName)
@@ -120,19 +120,18 @@ namespace andray {
                     object->onUpdate();
                 }
             }
-            void renderObjects(Assets& assets) {
+            void renderObjects() {
                 for (auto& object : objects) {
-                    auto workingTexture = assets.textures.find(object->textureName);
-                    if (workingTexture == assets.textures.end()) {
-                        std::cout << "Missing texture: " << object->textureName << "\n";
-                        continue;
-                    }
-                    object->texture = workingTexture->second;
                     object->onRender();
                 }
             }
-            void addObject(IObject* object) {
+            void addObject(IObject* object, Assets& assets) {
                 objects.push_back(object);
+                auto workingTexture = assets.textures.find(object->textureName);
+                if (workingTexture == assets.textures.end()) {
+                    std::cout << "Missing texture: " << object->textureName << "\n";
+                }
+                object->texture = &workingTexture->second;
                 object->onStart();
             }
         };
@@ -156,7 +155,7 @@ namespace andray {
         };
         void addObject(IObject* object) {
             object->app = this;
-            objectManager.addObject(object);
+            objectManager.addObject(object, assets);
         }
         int getWindowWidth() {
             return window.window_width;
@@ -178,7 +177,7 @@ namespace andray {
                 BeginDrawing();
                 ClearBackground(BLACK);
                 behavior->onRender();
-                objectManager.renderObjects(assets);
+                objectManager.renderObjects();
                 EndDrawing();
             }
         }
