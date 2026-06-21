@@ -5,6 +5,7 @@
 
 class DvdObject : public andray::IObject {
 public:
+
     DvdObject() :
         IObject("dvd", 200, 200) {
     }

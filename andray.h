@@ -115,12 +115,12 @@ namespace andray {
             std::vector<IObject*> objects;
             void drawObjects(Assets& assets) {
                 for (auto& object : objects) {
-                    auto it = assets.textures.find(object->textureName);
-                    if (it == assets.textures.end()) {
+                    auto workingTexture = assets.textures.find(object->textureName);
+                    if (workingTexture == assets.textures.end()) {
                         std::cout << "Missing texture: " << object->textureName << "\n";
                         continue;
                     }
-                    object->texture = &it->second;
+                    object->texture = &workingTexture->second;
                     object->draw();
                 }
             }
