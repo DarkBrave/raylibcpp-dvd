@@ -23,6 +23,12 @@ namespace andray {
         int x{}, y{};
         std::string textureName;
         Texture2D* texture;
+        IObject(const std::string& textureName, const int& x, const int& y) :
+            x(x), y(y),
+            textureName(textureName)
+        {}
+        ~IObject() = default;
+        virtual void draw() = 0;
     };
 
     class App {
@@ -106,14 +112,20 @@ namespace andray {
         class ObjectManager {
         private:
         public:
-            std::vector<IObject> objects;
-            void drawObjects(Assets& workingAssets) {
+            std::vector<IObject*> objects;
+            void drawObjects(Assets& assets) {
                 for (auto& object : objects) {
-                    object.texture = &workingAssets.textures[object.textureName];
+                    auto it = assets.textures.find(object->textureName);
+                    if (it == assets.textures.end()) {
+                        std::cout << "Missing texture: " << object->textureName << "\n";
+                        continue;
+                    }
+                    object->texture = &it->second;
+                    object->draw();
                 }
             }
-            void addObject(IObject& object) {
-                objects.emplace_back(object);
+            void addObject(IObject* object) {
+                objects.push_back(object);
             }
         };
         IBehavior* behavior;
@@ -148,7 +160,7 @@ namespace andray {
         void loadTexture(const std::string& name, const std::string& path) {
             assets.loadTexture(name, path);
         };
-        void addObject(IObject& object) {
+        void addObject(IObject* object) {
             objectManager.addObject(object);
         }
     };

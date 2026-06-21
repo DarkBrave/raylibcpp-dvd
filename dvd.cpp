@@ -5,14 +5,17 @@
 
 class DvdObject : public andray::IObject {
 public:
-    int x{200}, y{200};
-    std::string textureName{"dvd"};
+    DvdObject() :
+        IObject("dvd", 200, 200) {
+    }
+    void draw() override {
+        DrawTexture(*texture, x, y , WHITE);
+    }
 };
 
 class DvdBehavior : public andray::IBehavior {
 public:
     void onStart() {
-        std::cout << "onStart" << std::endl;
         app->loadTexture("dvd", "assets/textures/dvd.png");
         app->addObject(new DvdObject());
     }
