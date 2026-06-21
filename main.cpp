@@ -28,7 +28,7 @@ public:
     static inline Music music{};
     static void init() {
         InitAudioDevice();
-        music = LoadMusicStream("assets/music.ogg");
+        music = LoadMusicStream("assets/music/music.ogg");
         PlayMusicStream(music);
     }
     static void update() {
@@ -57,7 +57,7 @@ public:
     static Sound dvdSound;
 
     static void init() {
-        dvdSprite = LoadTexture("assets/dvd.png");
+        dvdSprite = LoadTexture("assets/textures/dvd.png");
         dvdSound = LoadSound("assets/sounds/bounce.ogg");
         SetSoundVolume(dvdSound, 0.1);
         dvdSource = {
