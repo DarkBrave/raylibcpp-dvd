@@ -8,18 +8,12 @@ public:
     int hueJump = {30};
     Color color{ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f)};
     int currentHue{0};
+
     DvdObject(const float vX, const float vY, const float sX, const float sY) :
         IObject("dvd", 200, 200),
         velocityX(vX), velocityY(vY), sizeX(sX), sizeY(sY)
     {}
-    void updateColor() {
-        if (currentHue + hueJump >= 360) {
-            currentHue = (currentHue + hueJump) - 360;
-        } else {
-            currentHue += hueJump;
-        }
-        color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
-    }
+
     void onStart() override {
         app->loadTexture("dvd", "assets/textures/dvd.png");
         auto generateRandomPosition = [](int max) -> float {
@@ -34,6 +28,14 @@ public:
         const int windowHeight = app->getWindowHeight();
         x += velocityX * dt;
         y += velocityY * dt;
+        auto updateColor = [this]() {
+            if (currentHue + hueJump >= 360) {
+                currentHue = (currentHue + hueJump) - 360;
+            } else {
+                currentHue += hueJump;
+            }
+            color = ColorFromHSV(static_cast<float>(currentHue), 1.0f, 1.0f);
+        };
 
         if (x <= 0) {
             x = 0;
