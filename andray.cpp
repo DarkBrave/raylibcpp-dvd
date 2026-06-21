@@ -23,7 +23,7 @@ namespace andray {
 
     class IObject : public ILifecycle {
     public:
-        int x{}, y{};
+        float x{}, y{};
         std::string textureName;
         Texture2D* texture;
         IObject(const std::string& textureName, const int& x, const int& y) :
@@ -75,7 +75,6 @@ namespace andray {
 
             Window(const int w, const int h, const std::string& initName) : window_width(w), window_height(h) {
                 InitWindow(window_width, window_height, "hi");
-                SetTargetFPS(60);
             }
 
             void update() {
