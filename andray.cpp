@@ -10,6 +10,7 @@ namespace andray {
     class ILifecycle {
     public:
         App* app = nullptr;
+        virtual ~ILifecycle() = default;
         virtual void onStart() {}
         virtual void onUpdate() {}
         virtual void onRender() {}
@@ -25,12 +26,11 @@ namespace andray {
     public:
         float x{}, y{};
         std::string textureName;
-        Texture2D* texture;
+        Texture2D* texture{};
         IObject(const std::string& textureName, const int& x, const int& y) :
             x(x), y(y),
             textureName(textureName)
         {}
-        ~IObject() = default;
     };
 
     class App {
