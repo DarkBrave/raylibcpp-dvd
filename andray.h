@@ -115,7 +115,12 @@ namespace andray {
         private:
         public:
             std::vector<IObject*> objects;
-            void drawObjects(Assets& assets) {
+            void updateObjects() {
+                for (auto object : objects) {
+                    object->onUpdate();
+                }
+            }
+            void renderObjects(Assets& assets) {
                 for (auto& object : objects) {
                     auto workingTexture = assets.textures.find(object->textureName);
                     if (workingTexture == assets.textures.end()) {
@@ -159,17 +164,21 @@ namespace andray {
         int getWindowHeight() {
             return window.window_height;
         }
+        float getFrameTime() {
+            return GetFrameTime();
+        }
         void run() {
             behavior->onStart();
             while (!WindowShouldClose()) {
                 window.update();
                 audioManager.update();
                 behavior->onUpdate();
+                objectManager.updateObjects();
 
                 BeginDrawing();
                 ClearBackground(BLACK);
                 behavior->onRender();
-                objectManager.drawObjects(assets);
+                objectManager.renderObjects(assets);
                 EndDrawing();
             }
         }
